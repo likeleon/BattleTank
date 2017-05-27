@@ -5,7 +5,11 @@
 
 void ATankPlayerController::BeginPlay()
 {
-	UE_LOG(LogTemp, Warning, TEXT("Tank=%s"), *GetControlledTank()->GetName());
+	ATank* Tank = GetControlledTank();
+	if (Tank != nullptr)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("PlayerController possesing: %s"), *Tank->GetName());
+	}
 }
 
 ATank* ATankPlayerController::GetControlledTank() const
