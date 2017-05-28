@@ -28,7 +28,8 @@ ATank* ATankPlayerController::GetControlledTank() const
 
 void ATankPlayerController::AimTowardsCrossHair()
 {
-	if (GetControlledTank() == nullptr)
+	ATank* Tank = GetControlledTank();
+	if (Tank == nullptr)
 	{
 		return;
 	}
@@ -36,7 +37,7 @@ void ATankPlayerController::AimTowardsCrossHair()
 	FVector HitLocation;
 	if (GetSightRayHitLocation(HitLocation))
 	{
-		UE_LOG(LogTemp, Warning, TEXT("HitLocation: %s"), *HitLocation.ToString());
+		Tank->AimAt(HitLocation);
 	}
 }
 

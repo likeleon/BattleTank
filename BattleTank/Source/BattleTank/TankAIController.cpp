@@ -5,6 +5,8 @@
 
 void ATankAIController::BeginPlay()
 {
+	Super::BeginPlay();
+
 	ATank* Tank = GetControlledTank();
 	if (Tank != nullptr)
 	{
@@ -15,6 +17,18 @@ void ATankAIController::BeginPlay()
 	if (PlayerTank != nullptr)
 	{
 		UE_LOG(LogTemp, Warning, TEXT("Found player tank: %s"), *PlayerTank->GetName())
+	}
+}
+
+void ATankAIController::Tick(float DeltaTime)
+{
+	Super::Tick(DeltaTime);
+
+	ATank* ControlledTank = GetControlledTank();
+	ATank* PlayerTank = GetPlayerTank();
+	if (ControlledTank != nullptr && PlayerTank != nullptr)
+	{
+		ControlledTank->AimAt(PlayerTank->GetActorLocation());
 	}
 }
 
