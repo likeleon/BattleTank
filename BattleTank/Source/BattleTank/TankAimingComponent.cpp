@@ -3,25 +3,27 @@
 #include "BattleTank.h"
 #include "TankAimingComponent.h"
 #include "TankBarrel.h"
+#include "TankTurret.h"
 
 // Sets default values for this component's properties
 UTankAimingComponent::UTankAimingComponent()
 {
 	// Set this component to be initialized when the game starts, and to be ticked every frame.  You can turn these features
 	// off to improve performance if you don't need them.
-	PrimaryComponentTick.bCanEverTick = true;
+	PrimaryComponentTick.bCanEverTick = false;
 
 	// ...
 }
 
-void UTankAimingComponent::SetBarrelReference(UTankBarrel* BarrelToSet)
+void UTankAimingComponent::SetBarrelAndTurretReferences(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
 {
 	Barrel = BarrelToSet;
+	Turret = TurretToSet;
 }
 
 void UTankAimingComponent::AimAt(const FVector& HitLocation, float LaunchSpeed)
 {
-	if (Barrel == nullptr)
+	if (Barrel == nullptr || Turret == nullptr)
 	{
 		return;
 	}
@@ -40,15 +42,17 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, float LaunchSpeed)
 	float Time = GetWorld()->GetTimeSeconds();
 	UE_LOG(LogTemp, Warning, TEXT("%f: %s, Aim solution found %f"), Time, *GetOwner()->GetName());
 
-	MoveBarrelTowards(LaunchVelocity.GetSafeNormal());
+	MoveBarrelAndTurretTowards(LaunchVelocity.GetSafeNormal());
 }
 
-void UTankAimingComponent::MoveBarrelTowards(const FVector& AimDirection)
+void UTankAimingComponent::MoveBarrelAndTurretTowards(const FVector& AimDirection)
 {
-	check(Barrel != nullptr);
+	check(Barrel != nullptr && Turret != nullptr);
 	FRotator BarrelRotator = Barrel->GetForwardVector().Rotation();
 	FRotator AimAsRotator = AimDirection.Rotation();
 	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
+	Turret->Rotate(DeltaRotator.Yaw);
 }
+
