@@ -22,6 +22,9 @@ public:
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void SetBarrelAndTurretReferences(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
 
+	UFUNCTION(BlueprintCallable, Category = Firing)
+	void Fire();
+
 private:
 	virtual void BeginPlay() override;
 
