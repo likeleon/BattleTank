@@ -34,13 +34,8 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation, float LaunchSpeed)
 		this, LaunchVelocity, StartLocation, HitLocation, LaunchSpeed,
 		false, 0.0f, 0.0f, ESuggestProjVelocityTraceOption::DoNotTrace))
 	{
-		float Time = GetWorld()->GetTimeSeconds();
-		UE_LOG(LogTemp, Warning, TEXT("%f: %s: No aim solve found"), Time, *GetOwner()->GetName());
 		return;
 	}
-
-	float Time = GetWorld()->GetTimeSeconds();
-	UE_LOG(LogTemp, Warning, TEXT("%f: %s, Aim solution found %f"), Time, *GetOwner()->GetName());
 
 	MoveBarrelAndTurretTowards(LaunchVelocity.GetSafeNormal());
 }
