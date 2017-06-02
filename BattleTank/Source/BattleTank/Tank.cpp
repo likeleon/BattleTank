@@ -41,8 +41,16 @@ void ATank::Fire()
 		return;
 	}
 
+	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
+	if (!bIsReloaded)
+	{
+		return;
+	}
+
 	FVector Location = Barrel->GetSocketLocation(FName("Projectile"));
 	FRotator Rotation = Barrel->GetSocketRotation(FName("Projectile"));
 	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
 	Projectile->LaunchProjectile(LaunchSpeed);
+
+	LastFireTime = FPlatformTime::Seconds();
 }
