@@ -8,6 +8,7 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
+class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -25,6 +26,10 @@ public:
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
+
+protected:
+	UPROPERTY(BlueprintReadonly)
+	UTankMovementComponent* TankMovementComponent = nullptr;
 
 private:
 	virtual void BeginPlay() override;
