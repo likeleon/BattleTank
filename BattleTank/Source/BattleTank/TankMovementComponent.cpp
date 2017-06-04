@@ -2,8 +2,34 @@
 
 #include "BattleTank.h"
 #include "TankMovementComponent.h"
+#include "TankTrack.h"
+
+void UTankMovementComponent::Initialize(UTankTrack* InLeftTrack, UTankTrack* InRightTrack)
+{
+	LeftTrack = InLeftTrack;
+	RightTrack = InRightTrack;
+}
 
 void UTankMovementComponent::IntendMoveForward(float Throw)
 {
-	UE_LOG(LogTemp, Warning, TEXT("Intend move forward throw: %f"), Throw);
+	if (LeftTrack != nullptr)
+	{
+		LeftTrack->SetThrottle(Throw);
+	}
+	if (RightTrack != nullptr)
+	{
+		RightTrack->SetThrottle(Throw);
+	}
+}
+
+void UTankMovementComponent::IntendTurnRight(float Throw)
+{
+	if (LeftTrack != nullptr)
+	{
+		LeftTrack->SetThrottle(Throw);
+	}
+	if (RightTrack != nullptr)
+	{
+		RightTrack->SetThrottle(-Throw);
+	}
 }
