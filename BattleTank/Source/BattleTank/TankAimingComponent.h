@@ -26,6 +26,8 @@ public:
 	// Sets default values for this component's properties
 	UTankAimingComponent();
 
+	void BeginPlay();
+
 	UFUNCTION(BlueprintCallable, Category = Setup)
 	void Initialize(UTankBarrel* InBarrel, UTankTurret* InTurret);
 
@@ -39,6 +41,8 @@ protected:
 	EFiringState FiringState = EFiringState::Reloading;
 
 private:
+	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunc) override;
+
 	void MoveBarrelAndTurretTowards(const FVector& AimDirection);
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)

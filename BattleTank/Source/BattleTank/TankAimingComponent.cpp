@@ -8,13 +8,28 @@
 
 UTankAimingComponent::UTankAimingComponent()
 {
-	PrimaryComponentTick.bCanEverTick = false;
+	PrimaryComponentTick.bCanEverTick = true;
+}
+
+void UTankAimingComponent::BeginPlay()
+{
+	Super::BeginPlay();
+
+	LastFireTime = FPlatformTime::Seconds();
 }
 
 void UTankAimingComponent::Initialize(UTankBarrel* InBarrel, UTankTurret* InTurret)
 {
 	Barrel = InBarrel;
 	Turret = InTurret;
+}
+
+void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunc)
+{
+	if (FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSeconds)
+	{
+		FiringState = EFiringState::Reloading;
+	}
 }
 
 void UTankAimingComponent::AimAt(const FVector& HitLocation)
@@ -50,13 +65,12 @@ void UTankAimingComponent::MoveBarrelAndTurretTowards(const FVector& AimDirectio
 
 void UTankAimingComponent::Fire()
 {
-	if (!ensure(Barrel))
+	if (!ensure(Barrel && ProjectileBlueprint))
 	{
 		return;
 	}
 
-	bool bIsReloaded = (FPlatformTime::Seconds() - LastFireTime) > ReloadTimeInSeconds;
-	if (!bIsReloaded)
+	if (FiringState == EFiringState::Reloading)
 	{
 		return;
 	}
