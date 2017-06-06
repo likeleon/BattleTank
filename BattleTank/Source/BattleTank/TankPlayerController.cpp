@@ -24,13 +24,12 @@ void ATankPlayerController::Tick(float DeltaTime)
 
 void ATankPlayerController::AimTowardsCrossHair()
 {
-	APawn* Pawn = GetPawn();
-	if (!ensure(Pawn))
+	if (!ensure(GetPawn()))
 	{
 		return;
 	}
 
-	UTankAimingComponent* AimingComponent = Pawn->FindComponentByClass<UTankAimingComponent>();
+	UTankAimingComponent* AimingComponent = GetPawn()->FindComponentByClass<UTankAimingComponent>();
 	if (!ensure(AimingComponent))
 	{
 		return;
