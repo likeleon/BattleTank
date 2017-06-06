@@ -13,7 +13,7 @@ ATank::ATank()
 
 void ATank::AimAt(const FVector& HitLocation)
 {
-	if (TankAimingComponent != nullptr)
+	if (ensure(TankAimingComponent))
 	{
 		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
 	}
@@ -26,7 +26,7 @@ void ATank::SetBarrel(UTankBarrel* InBarrel)
 
 void ATank::Fire()
 {
-	if (Barrel == nullptr)
+	if (!ensure(Barrel))
 	{
 		return;
 	}

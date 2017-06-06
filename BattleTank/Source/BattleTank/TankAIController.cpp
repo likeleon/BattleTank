@@ -10,7 +10,7 @@ void ATankAIController::Tick(float DeltaTime)
 
 	ATank* ControlledTank = Cast<ATank>(GetPawn());
 	ATank* PlayerTank = Cast<ATank>(GetWorld()->GetFirstPlayerController()->GetPawn());
-	if (ControlledTank == nullptr || PlayerTank == nullptr)
+	if (!ensure(ControlledTank && PlayerTank))
 	{
 		return;
 	}
