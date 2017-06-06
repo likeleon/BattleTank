@@ -2,21 +2,12 @@
 
 #include "BattleTank.h"
 #include "Tank.h"
-#include "TankAimingComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 
 ATank::ATank()
 {
 	PrimaryActorTick.bCanEverTick = false;
-}
-
-void ATank::AimAt(const FVector& HitLocation)
-{
-	if (ensure(TankAimingComponent))
-	{
-		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
-	}
 }
 
 void ATank::SetBarrel(UTankBarrel* InBarrel)
