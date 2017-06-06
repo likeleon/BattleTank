@@ -8,7 +8,6 @@
 class UTankBarrel;
 class UTankTurret;
 class UTankAimingComponent;
-class UTankMovementComponent;
 class AProjectile;
 
 UCLASS()
@@ -22,23 +21,15 @@ public:
 	void AimAt(const FVector& HitLocation);
 	
 	UFUNCTION(BlueprintCallable, Category = Setup)
-	void SetBarrelAndTurretReferences(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet);
+	void SetBarrel(UTankBarrel* InBarrel);
 
 	UFUNCTION(BlueprintCallable, Category = Firing)
 	void Fire();
 
-protected:
-	UPROPERTY(BlueprintReadonly)
+	UPROPERTY(BlueprintReadWrite)
 	UTankAimingComponent* TankAimingComponent = nullptr;
 
-	UPROPERTY(BlueprintReadonly)
-	UTankMovementComponent* TankMovementComponent = nullptr;
-
 private:
-	virtual void BeginPlay() override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
 

@@ -3,36 +3,25 @@
 #include "BattleTank.h"
 #include "Tank.h"
 #include "TankAimingComponent.h"
-#include "TankMovementComponent.h"
 #include "TankBarrel.h"
 #include "Projectile.h"
 
 ATank::ATank()
 {
 	PrimaryActorTick.bCanEverTick = false;
-
-	TankAimingComponent = CreateDefaultSubobject<UTankAimingComponent>(FName("Aiming Component"));
-}
-
-void ATank::BeginPlay()
-{
-	Super::BeginPlay();
-}
-
-void ATank::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
 }
 
 void ATank::AimAt(const FVector& HitLocation)
 {
-	TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	if (TankAimingComponent != nullptr)
+	{
+		TankAimingComponent->AimAt(HitLocation, LaunchSpeed);
+	}
 }
 
-void ATank::SetBarrelAndTurretReferences(UTankBarrel* BarrelToSet, UTankTurret* TurretToSet)
+void ATank::SetBarrel(UTankBarrel* InBarrel)
 {
-	TankAimingComponent->SetBarrelAndTurretReferences(BarrelToSet, TurretToSet);
-	Barrel = BarrelToSet;
+	Barrel = InBarrel;
 }
 
 void ATank::Fire()
