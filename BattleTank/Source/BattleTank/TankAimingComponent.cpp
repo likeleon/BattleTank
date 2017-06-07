@@ -22,14 +22,33 @@ void UTankAimingComponent::Initialize(UTankBarrel* InBarrel, UTankTurret* InTurr
 {
 	Barrel = InBarrel;
 	Turret = InTurret;
+	
+	AimDirection = Barrel->GetForwardVector();
 }
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunc)
 {
-	if (FPlatformTime::Seconds() - LastFireTime > ReloadTimeInSeconds)
+	if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
 	{
 		FiringState = EFiringState::Reloading;
 	}
+	else if (IsBarrelMoving())
+	{
+		FiringState = EFiringState::Aiming;
+	}
+	else
+	{
+		FiringState = EFiringState::Locked;
+	}
+}
+
+bool UTankAimingComponent::IsBarrelMoving() const
+{
+	if (!ensure(Barrel))
+	{
+		return false;
+	}
+	return !Barrel->GetForwardVector().Equals(AimDirection, 0.01f);
 }
 
 void UTankAimingComponent::AimAt(const FVector& HitLocation)
@@ -48,10 +67,12 @@ void UTankAimingComponent::AimAt(const FVector& HitLocation)
 		return;
 	}
 
-	MoveBarrelAndTurretTowards(LaunchVelocity.GetSafeNormal());
+	AimDirection = LaunchVelocity.GetSafeNormal();
+
+	MoveBarrelAndTurretTowards();
 }
 
-void UTankAimingComponent::MoveBarrelAndTurretTowards(const FVector& AimDirection)
+void UTankAimingComponent::MoveBarrelAndTurretTowards()
 {
 	check(Barrel != nullptr && Turret != nullptr);
 

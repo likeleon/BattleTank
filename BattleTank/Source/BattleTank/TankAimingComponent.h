@@ -43,7 +43,8 @@ protected:
 private:
 	virtual void TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunc) override;
 
-	void MoveBarrelAndTurretTowards(const FVector& AimDirection);
+	void MoveBarrelAndTurretTowards();
+	bool IsBarrelMoving() const;
 
 	UPROPERTY(EditDefaultsOnly, Category = Firing)
 	TSubclassOf<AProjectile> ProjectileBlueprint = nullptr;
@@ -58,4 +59,6 @@ private:
 	UTankTurret* Turret = nullptr;
 
 	double LastFireTime = 0.0;
+
+	FVector AimDirection;
 };
