@@ -81,7 +81,17 @@ void UTankAimingComponent::MoveBarrelAndTurretTowards()
 	FRotator DeltaRotator = AimAsRotator - BarrelRotator;
 
 	Barrel->Elevate(DeltaRotator.Pitch);
-	Turret->Rotate(DeltaRotator.Yaw);
+
+	float Yaw = DeltaRotator.Yaw;
+	if (Yaw > 180.f)
+	{
+		Yaw -= 360.f;
+	}
+	else if (Yaw < -180.f)
+	{
+		Yaw += 360.f;
+	}
+	Turret->Rotate(Yaw);
 }
 
 void UTankAimingComponent::Fire()
