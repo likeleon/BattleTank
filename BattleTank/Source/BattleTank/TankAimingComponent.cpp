@@ -28,7 +28,11 @@ void UTankAimingComponent::Initialize(UTankBarrel* InBarrel, UTankTurret* InTurr
 
 void UTankAimingComponent::TickComponent(float DeltaTime, enum ELevelTick TickType, FActorComponentTickFunction* ThisTickFunc)
 {
-	if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
+	if (RoundsLeft <= 0)
+	{
+		FiringState = EFiringState::OutOfAmmo;
+	}
+	else if (FPlatformTime::Seconds() - LastFireTime < ReloadTimeInSeconds)
 	{
 		FiringState = EFiringState::Reloading;
 	}
@@ -101,7 +105,12 @@ void UTankAimingComponent::Fire()
 		return;
 	}
 
-	if (FiringState == EFiringState::Reloading)
+	if (FiringState != EFiringState::Locked && FiringState != EFiringState::Aiming)
+	{
+		return;
+	}
+
+	if (RoundsLeft <= 0)
 	{
 		return;
 	}
@@ -111,10 +120,16 @@ void UTankAimingComponent::Fire()
 	AProjectile* Projectile = GetWorld()->SpawnActor<AProjectile>(ProjectileBlueprint, Location, Rotation);
 	Projectile->LaunchProjectile(LaunchSpeed);
 
+	--RoundsLeft;
 	LastFireTime = FPlatformTime::Seconds();
 }
 
 EFiringState UTankAimingComponent::GetFiringState() const
 {
 	return FiringState;
+}
+
+int UTankAimingComponent::GetRoundsLeft() const
+{
+	return RoundsLeft;
 }
