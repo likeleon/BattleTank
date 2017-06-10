@@ -30,8 +30,13 @@ private:
 
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void SetPawn(APawn* InPawn) override;
+
 	void AimTowardsCrossHair();
 	bool GetSightRayHitLocation(FVector& OutHitLocation) const;
 	bool GetLookDirection(FVector2D ScreenLocation, FVector& OutLookDirection) const;
 	bool GetLookVectorHitLocation(const FVector& LookDirection, FVector& OutHitLocation) const;
+
+	UFUNCTION()
+	void OnPossessedTankDeath();
 };
